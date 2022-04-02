@@ -6,9 +6,8 @@ class Item < ApplicationRecord
   belongs_to :region
   belongs_to :delivery_days
   has_one_attached :image
-  
-  validates :name, :explanation, presence: true
+
+  validates :image, :name, :explanation, presence: true
+  validates :category_id, :status_id, :shipping_cost_id, :region_id, :delivery_days_id, numericality: {other_than: 1 , message: "can't be blank"}
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to:300, less_than_or_equal_to: 9999999, allow_blank: true, }
-  validates :category, :status, :shipping_cost, :region, :delivery_days, numericality: {other_than: 1 , message: "can't be blank"}
-  
 end
