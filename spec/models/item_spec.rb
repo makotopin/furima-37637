@@ -25,7 +25,7 @@ RSpec.describe Item, type: :model do
       it 'nameが41文字以上では出品できない' do
         @item.name = 'a' * 41
         @item.valid?
-        expect(@item.errors.full_messages).to include("Name is too long (maximum is 40 characters)")
+        expect(@item.errors.full_messages).to include('Name is too long (maximum is 40 characters)')
       end
       it 'explanationが空では出品できない' do
         @item.explanation = ''
@@ -35,7 +35,7 @@ RSpec.describe Item, type: :model do
       it 'explanationが1001文字以上では出品できない' do
         @item.explanation = 'a' * 1001
         @item.valid?
-        expect(@item.errors.full_messages).to include("Explanation is too long (maximum is 1000 characters)")
+        expect(@item.errors.full_messages).to include('Explanation is too long (maximum is 1000 characters)')
       end
       it 'category_idが1だと出品できない' do
         @item.category = Category.find(1)
@@ -70,13 +70,13 @@ RSpec.describe Item, type: :model do
       it 'priceが300未満では出品できない' do
         @item.price = 299
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price must be greater than or equal to 300")
+        expect(@item.errors.full_messages).to include('Price must be greater than or equal to 300')
       end
       it 'priceが9999999より大きいと出品できない' do
-        @item.price = 10000000
+        @item.price = 10_000_000
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price must be less than or equal to 9999999")
+        expect(@item.errors.full_messages).to include('Price must be less than or equal to 9999999')
       end
-    end  
+    end
   end
 end
