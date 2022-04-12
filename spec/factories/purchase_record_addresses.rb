@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :purchase_record_address do
-    token {"tok_abcdefghijk00000000000000000"}
+    token { 'tok_abcdefghijk00000000000000000' }
     post_code { '123-4567' }
     region_id { 2 }
     municipality { '横浜市緑区' }
