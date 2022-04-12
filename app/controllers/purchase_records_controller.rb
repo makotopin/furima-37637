@@ -1,11 +1,13 @@
 class PurchaseRecordsController < ApplicationController
+  before_action :set_item, only: [:index, :create]
+  before_action :authenticate_user!, only: [:index, :create]
+  before_action :sold_out_redirect, only: [:index, :create]
+
   def index
-    @item = Item.find(params[:item_id])
     @purchase_record_address = PurchaseRecordAddress.new
   end
 
   def create
-    @item = Item.find(params[:item_id])
     @purchase_record_address = PurchaseRecordAddress.new(purchase_record_params)
     if @purchase_record_address.valid?
       pay_item
@@ -22,6 +24,10 @@ class PurchaseRecordsController < ApplicationController
     params.require(:purchase_record_address).permit(:post_code, :region_id, :municipality, :block_number, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], purchase_record_id: params[:purchase_record_id], token: params[:token])
   end
 
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
+
   def pay_item
     Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
     Payjp::Charge.create(
@@ -30,4 +36,11 @@ class PurchaseRecordsController < ApplicationController
       currency: 'jpy'
     )
   end
+
+  def sold_out_redirect
+    if @item.user_id == current_user.id || @item.purchase_record.present?
+      redirect_to root_path
+    end
+  end
+
 end
